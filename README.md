@@ -1,70 +1,74 @@
-# Getting Started with Create React App
+# K-ONE SOLUTIONS Media
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+An earlier social-media prototype with a React frontend and an Express/MongoDB
+backend. It explores feeds, profiles, following, notifications, messages, search,
+and image uploads. These are implemented areas of the source, not a claim that
+all flows work end to end.
 
-## Available Scripts
+## Current status
 
-In the project directory, you can run:
+This is a historical experiment and is not ready for a public production
+service. The nested applications under `src/frontend` and `src/backend` contain
+the main implementation. The root Create React App manifest is an older setup
+and contains a malformed dependency entry; do not use it as the install guide.
 
-### `npm start`
+The backend has no working automated test command. Registration is exposed in
+the UI but still needs a corresponding verified backend flow. Dependency
+upgrades, authorization checks for messages and Socket.IO rooms, upload limits,
+and startup validation need review before use with real accounts or data.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Source layout
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+| Path | Purpose |
+| --- | --- |
+| `src/frontend` | React 19 / Create React App 5 application |
+| `src/backend/server.js` | Express API, Socket.IO server, and MongoDB connection |
+| `src/backend/routes` | Authentication, posts, messages, notifications, and search |
+| `src/backend/models` | Mongoose data models |
+| `src/backend/utils/upload.js` | Local image-upload storage prototype |
+| Root `package.json` and `public` | Earlier scaffolding; needs consolidation |
 
-### `npm test`
+## Local development starting point
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Use an empty local MongoDB database and fictional accounts. Install each nested
+application from its own lockfile:
 
-### `npm run build`
+```sh
+cd src/backend
+npm ci
+```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Create a private `.env` in `src/backend` with `MONGO_URI`, `JWT_SECRET`, and
+optionally `PORT`. Use a random JWT secret and a disposable local database. The
+server defaults to port 5000. The frontend and Socket.IO origin use port 3000.
+Create a local `uploads` directory if you exercise the upload prototype, then
+start the backend with `npm start` from that directory.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+In another terminal, start the frontend:
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```sh
+cd src/frontend
+npm ci
+npm start
+```
 
-### `npm run eject`
+These are source-derived starting instructions. Installation, browser behavior,
+MongoDB workflows, and email or external integrations were not verified in the
+repository documentation cleanup. Dependency or compatibility errors should be
+recorded with the Node/npm version and reproduction steps.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+## Maintenance priorities
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+1. Consolidate the duplicate root and nested frontend tooling; establish a
+   supported Node version and reproducible clean install/build.
+2. Add synthetic authentication, authorization, and message-isolation tests.
+3. Validate configuration before accepting requests; finish registration.
+4. Authenticate Socket.IO room membership and review upload handling.
+5. Update dependencies and verify the main user flows on a disposable database.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+Downloaded `node_modules`, `.env` files, uploads, and build outputs are local
+artifacts. They are ignored, and the previously tracked backend dependencies
+have been removed from the current source tree. Existing Git history is retained.
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+For contributions, open a focused issue or pull request with reproduction steps
+and validation evidence. Never include real credentials or user data.
